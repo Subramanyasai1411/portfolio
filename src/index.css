@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-feature-settings: "cv11", "ss01", "ss03";
+  }
+
+  h1, h2, h3 {
+    font-family: theme('fontFamily.display');
+    letter-spacing: -0.025em;
+  }
+
+  ::selection {
+    background: rgba(139, 92, 246, 0.45);
+    color: #EEF2FF;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #060914; }
+  ::-webkit-scrollbar-thumb {
+    background: #1A2342;
+    border-radius: 8px;
+    border: 2px solid #060914;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: #2B3763; }
+}
+
+/* Serif italic emphasis (used sparingly on 1–2 words per heading) */
+.em-serif {
+  font-family: theme('fontFamily.serif');
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Very faint warm grid, only visible up close */
+.bg-grid-pattern {
+  background-size: 56px 56px;
+  background-image:
+    linear-gradient(to right, rgba(238, 242, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(238, 242, 255, 0.022) 1px, transparent 1px);
+}
+
+/* Film-grain noise overlay for a printed, editorial texture */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Legacy helpers, now toned down (no neon) */
+.text-glow-cyan,
+.text-glow-purple { text-shadow: none; }
+.border-glow-cyan { box-shadow: 0 0 0 1px rgba(61, 220, 255, 0.25); }
+
+/* Surfaces: solid warm layers + hairline border, minimal blur */
+.glass-panel {
+  background: rgba(15, 22, 48, 0.62);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid #1A2342;
+  box-shadow: inset 0 1px 0 0 rgba(238, 242, 255, 0.035);
+}
+
+.glass-panel-hover {
+  transition: border-color .25s ease, transform .25s cubic-bezier(0.16, 1, 0.3, 1), background-color .25s ease;
+}
+.glass-panel-hover:hover {
+  border-color: rgba(61, 220, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Scanline effect retired; class kept as a no-op for compatibility */
+.scanline { position: relative; }
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.animate-cursor { animation: blink 1s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Electric Aurora extras ---------- */
+
+/* Gradient text: cyan -> violet -> magenta */
+.text-aurora {
+  background: linear-gradient(100deg, #3DDCFF 0%, #A78BFA 50%, #FF5CAA 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: aurora-shift 8s ease-in-out infinite alternate;
+}
+@keyframes aurora-shift { to { background-position: 100% center; } }
+
+/* Serif-italic emphasis picks up the aurora gradient */
+.em-serif { background: linear-gradient(100deg, #3DDCFF, #A78BFA 60%, #FF5CAA); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .06em; }
+
+/* Cards: gradient hairline + glow on hover */
+.glass-panel { position: relative; }
+.glass-panel-hover:hover {
+  border-color: rgba(61, 220, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(61,220,255,.25), 0 20px 50px -20px rgba(139,92,246,.55), 0 0 40px -10px rgba(61,220,255,.25);
+}
+
+/* Slow drifting aurora blobs behind everything */
+@keyframes aurora-drift-a { 0%,100% { transform: translate3d(0,0,0) scale(1);} 50% { transform: translate3d(6vw,4vh,0) scale(1.15);} }
+@keyframes aurora-drift-b { 0%,100% { transform: translate3d(0,0,0) scale(1);} 50% { transform: translate3d(-7vw,-5vh,0) scale(1.2);} }
+.aurora-blob { position: absolute; border-radius: 9999px; filter: blur(110px); opacity: .5; will-change: transform; }
